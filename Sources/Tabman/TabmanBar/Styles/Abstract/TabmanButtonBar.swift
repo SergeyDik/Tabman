@@ -172,22 +172,14 @@ internal class TabmanButtonBar: TabmanBar {
             view.addSubview(button)
             
             if let image = item.image, let title = item.title {
-                // resize images to fit
-                let resizedImage = image.resize(toSize: Defaults.titleWithImageSize)
-                if resizedImage.size != .zero {
-                    button.setImage(resizedImage.withRenderingMode(.alwaysTemplate), for: .normal)
-                }
+                button.setImage(image.withRenderingMode(.alwaysTemplate), for: .normal)
                 button.setTitle(title, for: .normal)
                 // Nudge it over a little bit
                 button.titleEdgeInsets = UIEdgeInsetsMake(0, 5, 0, 0)
             } else if let title = item.title {
                 button.setTitle(title, for: .normal)
             } else if let image = item.image {
-                // resize images to fit
-                let resizedImage = image.resize(toSize: Defaults.itemImageSize)
-                if resizedImage.size != .zero {
-                    button.setImage(resizedImage.withRenderingMode(.alwaysTemplate), for: .normal)
-                }
+                button.setImage(image.withRenderingMode(.alwaysTemplate), for: .normal)
             }
             
             // appearance
