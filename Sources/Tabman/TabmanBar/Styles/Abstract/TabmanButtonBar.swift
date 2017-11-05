@@ -58,8 +58,23 @@ internal class TabmanButtonBar: TabmanBar {
             })
         }
     }
+    
     public var color: UIColor = Appearance.defaultAppearance.state.color!
     public var selectedColor: UIColor = Appearance.defaultAppearance.state.selectedColor!
+  
+    public var imageRenderingMode: UIImageRenderingMode = Appearance.defaultAppearance.style.imageRenderingMode! {
+        didSet {
+            guard oldValue != imageRenderingMode else {
+                return
+            }
+            updateButtons(update: {
+                guard let image = $0.currentImage else {
+                    return
+                }
+                $0.setImage(image.withRenderingMode(imageRenderingMode), for: .normal)
+            })
+        }
+    }
     
     public var itemVerticalPadding: CGFloat = Appearance.defaultAppearance.layout.itemVerticalPadding! {
         didSet {
@@ -142,6 +157,8 @@ internal class TabmanButtonBar: TabmanBar {
         let edgeInset = appearance.layout.edgeInset
         self.edgeInset = edgeInset ?? defaultAppearance.layout.edgeInset!
         
+        self.imageRenderingMode = appearance.style.imageRenderingMode ?? defaultAppearance.style.imageRenderingMode!
+        
         // update left margin for progressive style
         if self.indicator?.isProgressiveCapable ?? false {
             
@@ -187,7 +204,7 @@ internal class TabmanButtonBar: TabmanBar {
             button.titleLabel?.font = self.textFont
             
             // layout
-            NSLayoutConstraint.autoSetPriority(500, forConstraints: {
+            NSLayoutConstraint.autoSetPriority(UILayoutPriority(500), forConstraints: {
                 button.autoSetDimension(.height, toSize: Defaults.minimumItemHeight)
             })
             button.autoPinEdge(toSuperviewEdge: .top)
@@ -199,19 +216,20 @@ internal class TabmanButtonBar: TabmanBar {
             
             // Add horizontal pin constraints
             // These are breakable (For equal width instances etc.)
-            NSLayoutConstraint.autoSetPriority(500, forConstraints: {
+            NSLayoutConstraint.autoSetPriority(UILayoutPriority(500), forConstraints: {
                 if previousButton == nil { // pin to left
                     self.edgeMarginConstraints.append(button.autoPinEdge(toSuperviewEdge: .leading))
                 } else {
                     self.horizontalMarginConstraints.append(button.autoPinEdge(.leading, to: .trailing, of: previousButton!))
-                    if index == items.count - 1 {
-                        self.edgeMarginConstraints.append(button.autoPinEdge(toSuperviewEdge: .trailing))
-                    }
+                }
+                
+                if index == items.count - 1 {
+                    self.edgeMarginConstraints.append(button.autoPinEdge(toSuperviewEdge: .trailing))
                 }
             })
             
             // allow button to be compressed
-            NSLayoutConstraint.autoSetPriority(400, forConstraints: {
+            NSLayoutConstraint.autoSetPriority(UILayoutPriority(400), forConstraints: { 
                 button.autoSetContentCompressionResistancePriority(for: .horizontal)
             })
             
@@ -240,7 +258,7 @@ internal class TabmanButtonBar: TabmanBar {
     // MARK: Actions
     //
     
-    internal func tabButtonPressed(_ sender: UIButton) {
+    @objc internal func tabButtonPressed(_ sender: UIButton) {
         if let index = self.buttons.index(of: sender), (self.responder?.bar(self, shouldSelectItemAt: index) ?? true) {
             self.responder?.bar(self, didSelectItemAt: index)
         }

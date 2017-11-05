@@ -40,11 +40,12 @@ open class TabmanViewController: PageboyViewController, PageboyViewControllerDel
     
     /// Internal store for bar component transitions.
     internal var barTransitionStore = TabmanBarTransitionStore()
+    /// Collection of cached insets for view controllers per page index.
+    internal var viewControllerInsets: [PageIndex : UIEdgeInsets] = [:]
     
-    internal var viewControllerInsets: [Int : UIEdgeInsets] = [:]
-    
-    /// Whether any UICollectionView / UITableView in child view controllers should be 
+    /// Whether any UIScrollView in child view controllers should be
     /// automatically insetted to display below the TabmanBar.
+    /// NOTE: This needs to be set before a dataSource is set, defaults to true.
     public var automaticallyAdjustsChildScrollViewInsets: Bool = true {
         didSet {
             if automaticallyAdjustsScrollViewInsets {
@@ -74,6 +75,11 @@ open class TabmanViewController: PageboyViewController, PageboyViewControllerDel
         reloadRequiredBarInsets()
         insetChildViewControllerIfNeeded(self.currentViewController)
         reloadBarWithCurrentPosition()
+        
+        let appearance = bar.appearance ?? .defaultAppearance
+        activeTabmanBar?.extendBackgroundForSystemAreasIfNeeded(for: bar.location,
+                                                                in: self,
+                                                                appearance: appearance)
     }
     
     open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -90,10 +96,11 @@ open class TabmanViewController: PageboyViewController, PageboyViewControllerDel
     private var isScrollingAnimated: Bool = false
     
     open func pageboyViewController(_ pageboyViewController: PageboyViewController,
-                                      willScrollToPageAtIndex index: Int,
-                                      direction: PageboyViewController.NavigationDirection,
-                                      animated: Bool) {
-        self.insetChildViewControllerIfNeeded(self.viewControllers?[index])
+                                    willScrollToPageAt index: Int,
+                                    direction: PageboyViewController.NavigationDirection,
+                                    animated: Bool) {
+        let viewController = dataSource?.viewController(for: self, at: index)
+        self.insetChildViewControllerIfNeeded(viewController)
         
         if animated {
             isScrollingAnimated = true
@@ -105,7 +112,7 @@ open class TabmanViewController: PageboyViewController, PageboyViewControllerDel
     }
     
     open func pageboyViewController(_ pageboyViewController: PageboyViewController,
-                                      didScrollToPageAtIndex index: Int,
+                                      didScrollToPageAt index: Int,
                                       direction: PageboyViewController.NavigationDirection,
                                       animated: Bool) {
         isScrollingAnimated = false
@@ -114,7 +121,7 @@ open class TabmanViewController: PageboyViewController, PageboyViewControllerDel
     }
     
     open func pageboyViewController(_ pageboyViewController: PageboyViewController,
-                                      didScrollToPosition position: CGPoint,
+                                      didScrollTo position: CGPoint,
                                       direction: PageboyViewController.NavigationDirection,
                                       animated: Bool) {
         if !animated {
@@ -124,9 +131,9 @@ open class TabmanViewController: PageboyViewController, PageboyViewControllerDel
     }
     
     open func pageboyViewController(_ pageboyViewController: PageboyViewController,
-                                    didReload viewControllers: [UIViewController],
-                                    currentIndex: PageboyViewController.PageIndex) {
-        self.insetChildViewControllerIfNeeded(self.currentViewController)
+                                      didReloadWith currentViewController: UIViewController,
+                                      currentPageIndex: PageboyViewController.PageIndex) {
+        self.insetChildViewControllerIfNeeded(currentViewController)
     }
     
     // MARK: Positional Updates
@@ -139,7 +146,7 @@ open class TabmanViewController: PageboyViewController, PageboyViewControllerDel
     private func updateBar(withPosition position: CGFloat,
                            direction: PageboyViewController.NavigationDirection) {
         
-        let viewControllersCount = self.viewControllers?.count ?? 0
+        let viewControllersCount = self.pageCount ?? 0
         let barItemsCount = self.activeTabmanBar?.items?.count ?? 0
         let itemCountsAreEqual = viewControllersCount == barItemsCount
         
@@ -194,7 +201,7 @@ internal extension TabmanViewController {
     /// - Parameter location: The new location.
     func updateBar(withLocation location: TabmanBar.Location) {
         guard self.embeddingView == nil else {
-            self.embedBar(inView: self.embeddingView!)
+            self.embedBar(in: self.embeddingView!)
             return
         }
         

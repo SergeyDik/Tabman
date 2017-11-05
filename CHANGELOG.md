@@ -2,7 +2,11 @@
 All notable changes to this project will be documented in this file.
 `Tabman` adheres to [Semantic Versioning](http://semver.org/).
 
+#### 1.x Releases
+- `1.0.x` Releases - [1.0.0](#100) | [1.0.1](#101) | [1.0.2](#102) | [1.0.3](#103) | [1.0.4](#104)
+
 #### 0.x Releases
+- `0.8.x` Releases - [0.8.0](#080) | [0.8.1](#081) | [0.8.2](#082) | [0.8.3](#083)
 - `0.7.x` Releases - [0.7.0](#070) | [0.7.1](#071) | [0.7.2](#072) | [0.7.3](#073)
 - `0.6.x` Releases - [0.6.0](#060) | [0.6.1](#061) | [0.6.2](#062)
 - `0.5.x` Releases - [0.5.0](#050) | [0.5.1](#051) | [0.5.2](#052) | [0.5.3](#053)
@@ -10,11 +14,118 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.0.5](https://github.com/uias/Pageboy/releases/tag/1.0.5)
+Released on 2017-10-23
+
+#### Added
+- Added support for `UICollectionViewController` and automatic insetting.
+     - by [msaps](https://github.com/msaps).
+
+#### Fixed
+- [#109](https://github.com/uias/Tabman/issues/109) Fixed automatic insetting behavior when using a `UITableViewController`.
+     - by [msaps](https://github.com/msaps).
+
+## [1.0.4](https://github.com/uias/Pageboy/releases/tag/1.0.4)
+Released on 2017-10-22
+
+#### Added
+- New `embedBar(in view: UIView)` function to `TabmanViewController`.
+     - by [msaps](https://github.com/msaps).
+
+#### Updated
+- Deprecated `embedBar(inView view: UIView)` in `TabmanViewController`.
+     - by [msaps](https://github.com/msaps).
+- Add improved error handling to bar embedding and attachment operations.
+     - by [msaps](https://github.com/msaps).
+
+## [1.0.3](https://github.com/uias/Pageboy/releases/tag/1.0.3)
+Released on 2017-10-11
+
+#### Added
+- [#154](https://github.com/uias/Tabman/issues/154) Support for extending bar background on iPhone X function areas.
+     - by [msaps](https://github.com/msaps).
+- [#148](https://github.com/uias/Tabman/pull/148) `imageRenderingMode` to `TabmanBar.Appearance.Style`.
+     - by [thevest](https://github.com/thevest).
+
+## [1.0.2](https://github.com/uias/Pageboy/releases/tag/1.0.2)
+Released on 2017-09-28
+
+#### Added
+- `safeAreaInsets` to `TabmanBar.Insets`.
+     - by [msaps](https://github.com/msaps).
+
+#### Updated
+- Deprecated `topLayoutGuide` in `TabmanBar.Insets`.
+     - by [msaps](https://github.com/msaps).
+- Deprecated `bottomLayoutGuide` in `TabmanBar.Insets`.
+     - by [msaps](https://github.com/msaps).
+
+#### Fixed
+- [#146](https://github.com/uias/Tabman/issues/146) Incorrect layout with automatic insetting on iOS 11 and iPhone X.
+     - by [msaps](https://github.com/msaps).
+
+## [1.0.1](https://github.com/uias/Pageboy/releases/tag/1.0.1)
+Released on 2017-09-18
+
+#### Added
+- `context` property to `TabmanBar.Item`.
+     - by [Vortec4800](https://github.com/Vortec4800).
+
+#### Updated
+- Updated example project styling and improved iPhone X support.
+     - by [msaps](https://github.com/msaps).
+
+## [1.0.0](https://github.com/uias/Pageboy/releases/tag/1.0.0)
+Released on 2017-09-14
+
+#### Added
+- Swift 4 support
+    - by [msaps](https://github.com/msaps).
+- Support for Xcode 9 and iOS 11.
+    - by [msaps](https://github.com/msaps).
+- Compatibility for [Pageboy 2](https://github.com/uias/Pageboy/releases/tag/2.0.0).
+    - by [msaps](https://github.com/msaps).
+
+---
+
+## [0.8.3](https://github.com/uias/Pageboy/releases/tag/0.8.3)
+Released on 2017-09-05
+
+#### Added
+- [#135](https://github.com/uias/Tabman/issues/135) Ability to extend background edge insets under system components.
+     - Added by [msaps](https://github.com/msaps).
+- [#138](https://github.com/uias/Tabman/pull/138) `extendBackgroundEdgeInsets` property to `TabmanBar.Appearance`.
+     - Added by [msaps](https://github.com/msaps).
+
+## [0.8.2](https://github.com/uias/Pageboy/releases/tag/0.8.2)
+Released on 2017-08-25
+
+#### Fixed
+- [#132](https://github.com/uias/Tabman/issues/132) Crash when using `UITableViewController` with auto-insetting enabled.
+     - Fixed by [Patrick-Remy](https://github.com/Patrick-Remy).
+- Resolved deprecation warnings when using latest Xcode 9 beta.
+     - Fixed by [msaps](https://github.com/msaps).
+
+## [0.8.1](https://github.com/uias/Pageboy/releases/tag/0.8.1)
+Released on 2017-08-04
+
+#### Fixed
+- [#121](https://github.com/uias/Tabman/issues/121) Aligment issues when using a single bar item with `.buttonBar`.
+     - Fixed by [msaps](https://github.com/msaps).
+
+## [0.8.0](https://github.com/uias/Pageboy/releases/tag/0.8.0)
+Released on 2017-07-25
+
+#### Updated
+- Update Pageboy dependency to 1.4.x.
+     - Updated by [msaps](https://github.com/msaps).
+
+---
+
 ## [0.7.3](https://github.com/uias/Pageboy/releases/tag/0.7.3)
 Released on 2017-07-13
 
 #### Updated
-     
 - [#108](https://github.com/uias/Tabman/issues/108) Remove lazy variables to fix Carthage linker errors.
      - Fixed by [msaps](https://github.com/msaps).
 - Rename `TabmanBarBackgroundView` to `TabmanBar.BackgroundView`.
